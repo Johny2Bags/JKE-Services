@@ -3,226 +3,849 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JKE-Services - Home</title>
+    <title>Relay Trip Time Calculator</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js CDN for plotting the curve -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.7.0/dist/chart.min.js"></script>
+
+    <!-- PWA: Link to your manifest.json -->
+    <link rel="manifest" href="manifest.json">
+
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light gray background, will be overridden by sections */
+            background-color: #f3f4f6; /* Light gray background */
         }
-        /* Custom scrollbar for a cleaner look */
-        ::-webkit-scrollbar {
+        /* Custom scrollbar for table body */
+        .table-body-scroll {
+            max-height: 400px; /* Limit height for scroll */
+            overflow-y: auto;
+        }
+        .table-body-scroll::-webkit-scrollbar {
             width: 8px;
         }
-        ::-webkit-scrollbar-track {
-            background: #e2e8f0;
+        .table-body-scroll::-webkit-scrollbar-track {
+            background: #e0e0e0;
             border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb {
-            background: #CC0000; /* JKE Red */
+        .table-body-scroll::-webkit-scrollbar-thumb {
+            background: #888;
             border-radius: 10px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #A30000; /* Darker JKE Red on hover */
+        .table-body-scroll::-webkit-scrollbar-thumb:hover {
+            background: #555;
+        }
+        /* Ensure canvas is responsive */
+        canvas {
+            max-width: 100%;
+            height: auto;
+        }
+        /* New class for highlighted row */
+        .highlighted-row {
+            background-color: #dcfce7; /* Faint green */
+        }
+        /* Style for the actual trip time input field */
+        .actual-time-input {
+            width: 100px; /* Adjust width as needed */
+            padding: 4px 8px;
+            border: 1px solid #d1d5db; /* gray-300 */
+            border-radius: 0.375rem; /* rounded-md */
+            font-size: 0.875rem; /* text-sm */
+            line-height: 1.25rem;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .actual-time-input:focus {
+            outline: none;
+            border-color: #3b82f6; /* blue-500 */
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2); /* ring-blue-500 with opacity */
         }
     </style>
-    <!-- Tailwind CSS Custom Configuration for JKE-Services Colors -->
+</head>
+<body class="p-4 sm:p-6 md:p-8 lg:p-10 bg-gray-100 min-h-screen flex items-center justify-center">
+    <div class="bg-white p-6 sm:p-8 md:p-10 rounded-xl shadow-2xl w-full max-w-5xl border border-gray-200">
+        <h1 class="text-3xl sm:text-4xl font-bold text-center text-gray-800 mb-8">
+            Relay Trip Time Calculator
+        </h1>
+
+        <!-- Image added here -->
+        <img
+            src="https://github.com/Johny2Bags/relay-trip-time-app/blob/main/sticker.png?raw=true"
+            alt="Relay Trip Time App Logo"
+            class="w-32 h-32 mx-auto mb-8 rounded-full shadow-lg"
+            onerror="this.onerror=null; this.src='https://placehold.co/128x128/cccccc/333333?text=Logo';"
+        >
+
+        <!-- Input Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <div class="flex flex-col">
+                <label for="iset" class="text-gray-700 font-medium mb-2">
+                    Relay Pickup Current (Iset):
+                </label>
+                <div class="flex items-center gap-2">
+                    <input
+                        type="number"
+                        id="iset"
+                        value="600"
+                        min="0.1"
+                        step="0.1"
+                        class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 flex-grow"
+                    />
+                    <select
+                        id="isetUnit"
+                        class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white"
+                    >
+                        <option value="Primary">Primary (A)</option>
+                        <option value="Secondary">Secondary (A)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="relayType" class="text-gray-700 font-medium mb-2">
+                    Relay Type:
+                </label>
+                <select
+                    id="relayType"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white"
+                >
+                    <option value="GENERIC_IDMT">Generic IDMT Relay</option>
+                    <option value="VIP_400_RANGE">VIP 400 Range</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col">
+                <label for="curveType" class="text-gray-700 font-medium mb-2">
+                    Curve Type:
+                </label>
+                <select
+                    id="curveType"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200 bg-white"
+                >
+                    <option value="SI">IEC Standard Inverse (SI)</option>
+                    <option value="VI">IEC Very Inverse (VI)</option>
+                    <option value="EI">IEC Extremely Inverse (EI)</option>
+                    <option value="LI">IEC Long-Time Inverse (LI)</option>
+                    <option value="IEEE_MI">IEEE Moderately Inverse</option>
+                    <option value="IEEE_VI">IEEE Very Inverse</option>
+                    <option value="IEEE_EI">IEEE Extremely Inverse</option>
+                    <option value="DT">Definite Time (DT)</option>
+                </select>
+            </div>
+
+            <div class="flex flex-col" id="tmsContainer"> <!-- Added id for TMS container -->
+                <label for="tms" class="text-gray-700 font-medium mb-2">
+                    Time Multiplier Setting (TMS/TD):
+                </label>
+                <input
+                    type="number"
+                    id="tms"
+                    value="0.76"
+                    min="0.01"
+                    step="0.01"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                />
+            </div>
+
+            <!-- Definite Time Delay Input (conditionally visible) -->
+            <div class="flex flex-col" id="dtDelayContainer">
+                <label for="dtDelay" class="text-gray-700 font-medium mb-2">
+                    Definite Time Delay (s):
+                </label>
+                <input
+                    type="number"
+                    id="dtDelay"
+                    value="0.5"
+                    min="0"
+                    step="0.1"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                />
+            </div>
+
+            <!-- CT Ratio Inputs -->
+            <!-- Conditional note for VIP 400 Range -->
+            <div id="vip400CtNote" class="col-span-1 md:col-span-2 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm hidden">
+                <p class="font-medium">Note: CT ratings for VIP 400 range are generally (CUa 200 / 1) but can be (CUb 630 / 1).</p>
+            </div>
+            <div class="flex flex-col">
+                <label for="ctPrimary" class="text-gray-700 font-medium mb-2">
+                    CT Primary Rating [A]:
+                </label>
+                <input
+                    type="number"
+                    id="ctPrimary"
+                    value="100"
+                    min="1"
+                    step="1"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                />
+            </div>
+
+            <div class="flex flex-col">
+                <label for="ctSecondary" class="text-gray-700 font-medium mb-2">
+                    CT Secondary Rating [A]:
+                </label>
+                <input
+                    type="number"
+                    id="ctSecondary"
+                    value="1"
+                    min="1"
+                    step="1"
+                    class="p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                />
+            </div>
+        </div>
+
+        <!-- Curve Constants Display -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-2">Curve Constants:</h3>
+            <p class="text-gray-600" id="constantsDisplay">
+                <span class="font-bold">N/A</span>
+            </p>
+        </div>
+
+        <!-- Abbreviations Description Section -->
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 mb-8">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Abbreviations & Definitions:</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2 text-gray-700 text-sm">
+                <div><span class="font-semibold">Iset:</span> Relay Pickup Current. The minimum current at which the relay begins to operate.</div>
+                <div><span class="font-semibold">TMS/TD:</span> Time Multiplier Setting / Time Dial. A setting that scales the operating time of the relay curve.</div>
+                <div><span class="font-semibold">DT Delay:</span> Definite Time Delay. A fixed time delay for definite time relays.</div>
+                <div><span class="font-semibold">CT Primary/Secondary:</span> Current Transformer Primary/Secondary Rating. Defines the ratio of the CT.</div>
+                <div><span class="font-semibold">K, P:</span> Constants used in IEC IDMT curve formulas.</div>
+                <div><span class="font-semibold">A, B, P:</span> Constants used in IEEE IDMT curve formulas.</div>
+                <div><span class="font-semibold">SI:</span> Standard Inverse (IEC).</div>
+                <div><span class="font-semibold">VI:</span> Very Inverse (IEC).</div>
+                <div><span class="font-semibold">EI:</span> Extremely Inverse (IEC).</div>
+                <div><span class="font-semibold">LI:</span> Long-Time Inverse (IEC).</div>
+                <div><span class="font-semibold">DT:</span> Definite Time.</div>
+                <div><span class="font-semibold">IEEE MI:</span> IEEE Moderately Inverse.</div>
+                <div><span class="font-semibold">IEEE VI:</span> IEEE Very Inverse.</div>
+                <div><span class="font-semibold">IEEE EI:</span> IEEE Extremely Inverse.</div>
+                <div><span class="font-semibold">VIP 400 Range:</span> A specific relay type that uses millivolt injection for testing, but still follows a selected time-current curve.</div>
+            </div>
+        </div>
+
+        <!-- Output Section -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Calculated Values
+        </h2>
+        <div class="overflow-x-auto rounded-lg border border-gray-300 shadow-sm mb-8">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50" id="resultsTableHeader">
+                    <!-- Headers will be dynamically generated by JavaScript -->
+                </thead>
+                <tbody id="resultsTableBody" class="bg-white divide-y divide-gray-200 table-body-scroll">
+                    <!-- Results will be inserted here by JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Chart Section -->
+        <h2 class="text-2xl font-bold text-gray-800 mb-6 text-center">
+            Time-Current Curve
+        </h2>
+        <div class="bg-gray-50 p-4 rounded-lg border border-gray-200 flex justify-center items-center">
+            <canvas id="tripTimeChart"></canvas>
+        </div>
+    </div>
+
     <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        'jke-red': '#CC0000', /* A strong red from the logo */
-                        'jke-dark': '#1A1A1A', /* A very dark gray/black for backgrounds */
-                        'jke-light-gray': '#F8F8F8', /* A subtle light gray for section backgrounds */
-                        'jke-text-dark': '#333333', /* Dark text for light backgrounds */
+        // PWA: Service Worker registration
+        // This code registers the service worker.
+        // The service worker file (service-worker.js) should be in the same directory as this HTML file.
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('service-worker.js')
+                    .then(registration => {
+                        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                    })
+                    .catch(err => {
+                        console.log('ServiceWorker registration failed: ', err);
+                    });
+            });
+        }
+
+        // JavaScript for calculations and dynamic table generation
+
+        // Get references to input elements
+        const isetInput = document.getElementById('iset');
+        const isetUnitSelect = document.getElementById('isetUnit'); // New reference for iset unit
+        const relayTypeSelect = document.getElementById('relayType');
+        const curveTypeSelect = document.getElementById('curveType');
+        const tmsInput = document.getElementById('tms');
+        const tmsContainer = document.getElementById('tmsContainer'); // New reference for TMS container
+        const dtDelayInput = document.getElementById('dtDelay');
+        const dtDelayContainer = document.getElementById('dtDelayContainer'); // Reference to the container div
+        const ctPrimaryInput = document.getElementById('ctPrimary');
+        const ctSecondaryInput = document.getElementById('ctSecondary');
+        const vip400CtNote = document.getElementById('vip400CtNote'); // Reference to the new note div
+
+        const resultsTableHeader = document.getElementById('resultsTableHeader');
+        const resultsTableBody = document.getElementById('resultsTableBody');
+        const constantsDisplay = document.getElementById('constantsDisplay');
+        const tripTimeChartCanvas = document.getElementById('tripTimeChart');
+
+        let tripChart; // Variable to hold the Chart.js instance
+        let lastClickedRow = null; // Variable to keep track of the last clicked row
+
+        // Store actual trip times keyed by their primary fault current for easy access when updating the chart
+        const actualTripTimesMap = new Map();
+
+        /**
+         * Initializes or updates the Chart.js graph.
+         * @param {Array<number>} labels - X-axis labels (Fault Current - primary).
+         * @param {Array<number>} data - Y-axis data (Trip Times).
+         * @param {string} curveType - The selected curve type for the chart title.
+         * @param {Array<number>} dataMinus5 - Y-axis data for -5% trip times.
+         * @param {Array<number>} dataPlus5 - Y-axis data for +5% trip times.
+         * @param {Map<number, number>} actualTimesMap - Map of primary fault current to actual trip time.
+         */
+        function updateChart(labels, data, curveType, dataMinus5, dataPlus5, actualTimesMap) {
+            if (tripChart) {
+                tripChart.destroy(); // Destroy existing chart instance to prevent memory leaks
+            }
+
+            // Filter out "No Trip" or invalid values for plotting
+            const filteredLabels = [];
+            const filteredData = [];
+            const filteredDataMinus5 = [];
+            const filteredDataPlus5 = [];
+            const actualPlotData = []; // Data for actual trip time points
+
+            for (let i = 0; i < labels.length; i++) {
+                if (typeof data[i] === 'number' && data[i] !== 0) {
+                    filteredLabels.push(labels[i]);
+                    filteredData.push(data[i]);
+                    filteredDataMinus5.push(dataMinus5[i]);
+                    filteredDataPlus5.push(dataPlus5[i]);
+
+                    // Add actual trip time if available for this fault current
+                    if (actualTimesMap.has(labels[i])) {
+                        actualPlotData.push({ x: labels[i], y: actualTimesMap.get(labels[i]) });
                     }
                 }
             }
-        }
-    </script>
-</head>
-<body class="text-jke-text-dark">
 
-    <!-- Header Section -->
-    <header class="bg-jke-dark shadow-md py-4 px-6 md:px-10 lg:px-20 sticky top-0 z-50 rounded-b-lg">
-        <div class="container mx-auto flex justify-between items-center">
-            <!-- Logo/Company Name -->
-            <a href="index.html" class="flex items-center">
-                <img src="JKE.png" alt="JKE-Services Logo" class="h-10 w-auto object-contain">
-            </a>
+            // Calculate dynamic min/max for X and Y axes
+            let minX = Math.min(...filteredLabels);
+            let maxX = Math.max(...filteredLabels);
+            let minY = Math.min(...filteredData, ...filteredDataMinus5, ...filteredDataPlus5, ...actualPlotData.map(p => p.y));
+            let maxY = Math.max(...filteredData, ...filteredDataMinus5, ...filteredDataPlus5, ...actualPlotData.map(p => p.y));
 
-            <!-- Navigation Menu (Desktop) -->
-            <nav class="hidden md:flex space-x-6">
-                <a href="index.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Home</a>
-                <a href="services.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Services</a>
-                <a href="about.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">About Us</a>
-                <a href="contact.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Contact</a>
-            </nav>
+            // Add padding for logarithmic scales. Ensure minimums are > 0.
+            // For log scales, a multiplicative padding works best.
+            minX = Math.max(0.1, minX * 0.8); // Ensure it's not zero for log scale
+            maxX = maxX * 1.2;
+            minY = Math.max(0.01, minY * 0.8); // Ensure it's not zero for log scale
+            maxY = maxY * 1.2;
 
-            <!-- Mobile Menu Button -->
-            <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-gray-300 hover:text-jke-red focus:outline-none">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
 
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="md:hidden hidden mt-4 space-y-2 bg-gray-800 rounded-md">
-            <a href="index.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Home</a>
-            <a href="services.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Services</a>
-            <a href="about.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">About Us</a>
-            <a href="contact.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Contact</a>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section id="home" class="relative bg-jke-dark text-white py-20 md:py-32 overflow-hidden rounded-b-xl">
-        <div class="absolute inset-0 z-0 opacity-10">
-            <!-- Background pattern for visual interest -->
-            <svg class="w-full h-full" fill="none" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice">
-                <pattern id="pattern-circles" x="0" y="0" width="10" height="10" patternUnits="userSpaceOnUse">
-                    <circle cx="2" cy="2" r="1" fill="rgba(255,255,255,0.1)"></circle>
-                </pattern>
-                <rect x="0" y="0" width="100%" height="100%" fill="url(#pattern-circles)"></rect>
-            </svg>
-        </div>
-        <div class="container mx-auto px-6 md:px-10 lg:px-20 relative z-10 text-center">
-            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
-                Expert Electrical Solutions for Commercial & Industrial Clients
-            </h1>
-            <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto opacity-90">
-                JKE-Services specializes in comprehensive electrical testing, commissioning, and installation for businesses across London and Essex, UK.
-                We deliver reliable, safe, and efficient solutions tailored for commercial and industrial environments.
-            </p>
-            <a href="contact.html" class="inline-block bg-jke-red text-white hover:bg-red-700 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
-                Get a Free Quote
-            </a>
-        </div>
-    </section>
-
-    <!-- Services Section (Preview on Home) -->
-    <section id="services-preview" class="py-16 md:py-24 bg-jke-light-gray rounded-xl mx-4 md:mx-auto mt-8 max-w-7xl shadow-lg">
-        <div class="container mx-auto px-6 md:px-10 lg:px-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-jke-text-dark">Our Core Services</h2>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                <!-- Service Card 1: Electrical Testing -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
-                    <div class="text-jke-red mb-4 flex justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9.75 12L12 9.75L14.25 12L14.25 17M12 21C16.9706 21 21 16.9706 21 12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21Z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-center mb-4 text-jke-text-dark">Electrical Testing</h3>
-                    <p class="text-gray-700 text-center">
-                        Comprehensive electrical testing services to ensure the safety and compliance of your commercial and industrial installations.
-                    </p>
-                </div>
-
-                <!-- Service Card 2: Electrical Commissioning -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
-                    <div class="text-jke-red mb-4 flex justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14H11L11 21L20 10H13Z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-center mb-4 text-jke-text-dark">Electrical Commissioning</h3>
-                    <p class="text-gray-700 text-center">
-                        Expert commissioning services to ensure your large-scale electrical systems are installed correctly and operating
-                        at peak performance.
-                    </p>
-                </div>
-
-                <!-- Service Card 3: Electrical Installation -->
-                <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition duration-300 transform hover:scale-105">
-                    <div class="text-jke-red mb-4 flex justify-center">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6V18M18 12H6" />
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2Z" />
-                        </svg>
-                    </div>
-                    <h3 class="text-xl font-semibold text-center mb-4 text-jke-text-dark">Electrical Installation</h3>
-                    <p class="text-gray-700 text-center">
-                        Professional and safe electrical installations for commercial and industrial properties,
-                        adhering to all UK regulations and standards.
-                    </p>
-                </div>
-            </div>
-            <div class="text-center mt-10">
-                <a href="services.html" class="inline-block bg-jke-red text-white hover:bg-red-700 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
-                    View All Services
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- About Us Section (Preview on Home) -->
-    <section id="about-preview" class="py-16 md:py-24 bg-white rounded-xl mx-4 md:mx-auto mt-8 max-w-7xl shadow-lg">
-        <div class="container mx-auto px-6 md:px-10 lg:px-20 flex flex-col md:flex-row items-center gap-10">
-            <div class="md:w-1/2">
-                <img src="https://placehold.co/600x400/1A1A1A/FFFFFF?text=Commercial+Work" alt="About JKE-Services - Commercial Electrical Work" class="rounded-xl shadow-lg w-full h-auto object-cover">
-            </div>
-            <div class="md:w-1/2 text-center md:text-left">
-                <h2 class="text-3xl md:text-4xl font-bold mb-6 text-jke-text-dark">About JKE-Services</h2>
-                <p class="text-lg text-gray-700 mb-4">
-                    JKE-Services is a dedicated UK-based company specialising in comprehensive electrical solutions for the **commercial and industrial sectors**.
-                    With years of experience, we pride ourselves on delivering high-quality, safe, and efficient
-                    electrical testing, commissioning, and installation services tailored for businesses.
-                </p>
-                <div class="text-center md:text-left mt-6">
-                    <a href="about.html" class="inline-block bg-jke-red text-white hover:bg-red-700 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
-                        Learn More About Us
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer Section -->
-    <footer class="bg-jke-dark text-gray-400 py-8 px-6 md:px-10 lg:px-20 text-center rounded-t-lg">
-        <div class="container mx-auto">
-            <p>&copy; 2024 JKE-Services. All rights reserved.</p>
-            <p class="mt-2">Serving London & Essex, UK</p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="#" class="text-gray-400 hover:text-jke-red transition duration-300">Privacy Policy</a>
-                <span class="text-gray-600">|</span>
-                <a href="#" class="text-gray-400 hover:text-jke-red transition duration-300">Terms of Service</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- JavaScript for Mobile Menu Toggle -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            const mobileMenu = document.getElementById('mobile-menu');
-
-            mobileMenuButton.addEventListener('click', function() {
-                mobileMenu.classList.toggle('hidden');
-            });
-
-            // Smooth scrolling for navigation links (only relevant for internal page anchors)
-            // For external page links, the browser handles navigation directly.
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    document.querySelector(this.getAttribute('href')).scrollIntoView({
-                        behavior: 'smooth'
-                    });
-
-                    // Close mobile menu after clicking a link
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
+            const ctx = tripTimeChartCanvas.getContext('2d');
+            tripChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: filteredLabels,
+                    datasets: [
+                        {
+                            label: `Trip Time -5%`,
+                            data: filteredDataMinus5,
+                            borderColor: 'rgba(59, 130, 246, 0.7)', // Darker blue border for shading
+                            backgroundColor: 'rgba(59, 130, 246, 0.25)', // Darker faint blue shade
+                            borderWidth: 0, // No line for this dataset
+                            pointRadius: 0,
+                            fill: false, // This dataset should not fill from the origin
+                            tension: 0.1,
+                            order: 3 // Draw this first so it's at the bottom of the stack
+                        },
+                        {
+                            label: `Trip Time +5%`,
+                            data: filteredDataPlus5,
+                            borderColor: 'rgba(59, 130, 246, 0.7)', // Darker blue border for shading
+                            backgroundColor: 'rgba(59, 130, 246, 0.25)', // Darker faint blue shade
+                            borderWidth: 0, // No line for this dataset
+                            pointRadius: 0,
+                            fill: '-1', // Fill from this line to the previous dataset (the -5% line)
+                            tension: 0.1,
+                            order: 2 // Draw this second to fill between +5% and -5%
+                        },
+                        {
+                            label: `Expected Trip Time`, // Changed label here
+                            data: filteredData,
+                            borderColor: 'rgb(59, 130, 246)', // Blue color for the main line
+                            backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                            borderWidth: 0.8, // Made thinner (original was 2, previous was 1)
+                            pointRadius: 3,
+                            pointBackgroundColor: 'rgb(59, 130, 246)',
+                            fill: false,
+                            tension: 0.1,
+                            order: 1 // Draw this last so it's on top
+                        },
+                        {
+                            label: 'Actual Trip Time',
+                            data: actualPlotData,
+                            borderColor: 'rgb(255, 99, 132)', // Red color for actual points
+                            backgroundColor: 'rgb(255, 99, 132)',
+                            borderWidth: 2, // Thinner cross (increased from 1.5 to 2)
+                            pointRadius: 8, // Slightly larger for visibility as a cross (increased from 6 to 8)
+                            pointStyle: 'crossRot', // Changed to thin cross
+                            fill: false,
+                            showLine: false, // Do not connect points with a line
+                            order: 0 // Draw this on top of everything else
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: {
+                            type: 'logarithmic', // Logarithmic scale for current
+                            min: minX, // Set dynamic min
+                            max: maxX, // Set dynamic max
+                            title: {
+                                display: true,
+                                text: 'Fault Current (Primary Side) [A] - Log Scale',
+                                color: '#4b5563',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    // Display only specific ticks to avoid clutter
+                                    if (value >= 1 && value < 10 && value % 1 === 0) return value;
+                                    if (value >= 10 && value < 100 && value % 10 === 0) return value;
+                                    if (value >= 100 && value < 1000 && value % 100 === 0) return value;
+                                    if (value >= 1000 && value < 10000 && value % 1000 === 0) return value;
+                                    if (value >= 10000 && value % 10000 === 0) return value;
+                                    return null;
+                                },
+                                color: '#6b7280'
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            }
+                        },
+                        y: {
+                            type: 'logarithmic', // Logarithmic scale for time
+                            min: minY, // Set dynamic min
+                            max: maxY, // Set dynamic max
+                            title: {
+                                display: true,
+                                text: 'Trip Time (s) - Log Scale',
+                                color: '#4b5563',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            ticks: {
+                                callback: function(value, index, values) {
+                                    // Display only specific ticks to avoid clutter
+                                    if (value >= 0.01 && value < 0.1 && (value * 100) % 1 === 0) return value;
+                                    if (value >= 0.1 && value < 1 && (value * 10) % 1 === 0) return value;
+                                    if (value >= 1 && value < 10 && value % 1 === 0) return value;
+                                    if (value >= 10 && value < 100 && value % 10 === 0) return value;
+                                    if (value >= 100 && value < 1000 && value % 100 === 0) return value;
+                                    if (value >= 1000 && value % 1000 === 0) return value;
+                                    return null;
+                                },
+                                color: '#6b7280'
+                            },
+                            grid: {
+                                color: 'rgba(200, 200, 200, 0.2)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                color: '#4b5563',
+                                font: {
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        // For actual points, show both X and Y
+                                        if (context.dataset.label === 'Actual Trip Time') {
+                                            label += `X: ${context.parsed.x.toFixed(2)} A, Y: ${context.parsed.y.toFixed(3)} s`;
+                                        } else {
+                                            label += `${context.parsed.y.toFixed(3)} s at ${context.parsed.x.toFixed(2)} A (Primary)`;
+                                        }
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
                     }
-                });
+                }
             });
+        }
+
+        /**
+         * Defines the constants for each IEC and IEEE IDMT curve type.
+         * Includes 'type' property to distinguish between IEC and IEEE formulas.
+         */
+        const curveConstants = {
+            "SI": { type: "IEC", K: 0.14, P: 0.02 },
+            "VI": { type: "IEC", K: 13.5, P: 1.0 },
+            "EI": { type: "IEC", K: 80.0, P: 2.0 }, // IEC Extremely Inverse
+            "LI": { type: "IEC", K: 120.0, P: 1.0 },
+            "IEEE_MI": { type: "IEEE", A: 0.0515, B: 0.1140, P: 0.02 },
+            "IEEE_VI": { type: "IEEE", A: 19.61, B: 0.4910, P: 2.00 },
+            "IEEE_EI": { type: "IEEE", A: 28.200, B: 0.1217, P: 2.00 }, // IEEE Extremely Inverse
+            "DT": { type: "DT" }
+        };
+
+        /**
+         * Calculates the trip time based on the selected curve type and input parameters.
+         * This function is independent of the relay type, as the underlying curve is the same.
+         * @param {number} currentMultiplier - The ratio of fault current to pickup current (I/Iset).
+         * @param {string} curveType - The type of IDMT curve (SI, VI, EI, LI, IEEE_MI, IEEE_VI, IEEE_EI, DT).
+         * @param {number} tms - Time Multiplier Setting (or Time Dial for IEEE).
+         * @param {number} dtDelay - Definite Time Delay (for DT curve).
+         * @returns {number | string} The calculated trip time as a number, or "No Trip", or "Invalid Curve Type".
+         */
+        function calculateTripTime(currentMultiplier, curveType, tms, dtDelay) {
+            if (currentMultiplier <= 1) {
+                return "No Trip"; // Relay does not trip if current is below or at Iset
+            }
+
+            const constants = curveConstants[curveType];
+            if (!constants) {
+                return "Invalid Curve Type";
+            }
+
+            if (constants.type === "DT") {
+                return dtDelay; // Return fixed delay for DT curve
+            }
+
+            let tripTime;
+            const denominator = Math.pow(currentMultiplier, constants.P) - 1;
+
+            // Handle division by zero or very small denominators that could lead to extremely large times
+            if (denominator <= 0) {
+                return "Very Long Time / No Trip";
+            }
+
+            if (constants.type === "IEC") {
+                tripTime = tms * (constants.K / denominator);
+            } else if (constants.type === "IEEE") {
+                tripTime = tms * ((constants.A / denominator) + constants.B);
+            } else {
+                return "Invalid Curve Type"; // Should not happen with dropdown
+            }
+
+            // Ensure trip time is not negative or excessively large due to floating point inaccuracies
+            if (tripTime < 0) {
+                return "No Trip";
+            } else if (tripTime > 9999) { // Cap excessively large times for display and plotting
+                return 9999;
+            }
+
+            return tripTime;
+        }
+
+        /**
+         * Updates the K, P, A, B values displayed based on the selected curve type.
+         */
+        function updateConstantsDisplay() {
+            const curveType = curveTypeSelect.value;
+            const constants = curveConstants[curveType];
+
+            if (constants) {
+                if (constants.type === "IEC") {
+                    constantsDisplay.innerHTML = `IEC Constants: K: <span class="font-bold">${constants.K}</span>, P: <span class="font-bold">${constants.P}</span>`;
+                } else if (constants.type === "IEEE") {
+                    constantsDisplay.innerHTML = `IEEE Constants: A: <span class="font-bold">${constants.A}</span>, B: <span class="font-bold">${constants.B}</span>, P: <span class="font-bold">${constants.P}</span>`;
+                } else if (constants.type === "DT") {
+                    constantsDisplay.innerHTML = `No specific constants for Definite Time curve.`;
+                }
+            } else {
+                constantsDisplay.innerHTML = `Constants: <span class="font-bold">N/A</span>`;
+            }
+        }
+
+        /**
+         * Toggles the visibility of the Definite Time Delay input field, TMS input field, and the VIP 400 CT note.
+         */
+        function toggleVisibility() {
+            // Toggle DT Delay and TMS visibility
+            if (curveTypeSelect.value === "DT") {
+                dtDelayContainer.style.display = 'flex'; // Show DT delay
+                tmsContainer.style.display = 'none'; // Hide TMS
+            } else {
+                dtDelayContainer.style.display = 'none'; // Hide DT delay
+                tmsContainer.style.display = 'flex'; // Show TMS
+            }
+
+            // Toggle VIP 400 CT note visibility
+            if (relayTypeSelect.value === "VIP_400_RANGE") {
+                vip400CtNote.classList.remove('hidden');
+            } else {
+                vip400CtNote.classList.add('hidden');
+            }
+        }
+
+        /**
+         * Updates the table headers based on the selected relay type.
+         */
+        function updateTableHeaders() {
+            const relayType = relayTypeSelect.value;
+            const headerTableElement = resultsTableHeader; // This is the <thead> element
+
+            // Clear all existing content within the <thead>
+            headerTableElement.innerHTML = '';
+
+            // Create a new <tr> element for the headers
+            const headerRow = document.createElement('tr');
+            headerTableElement.appendChild(headerRow); // Append the new row to the <thead>
+
+            // Add fixed headers to the new row
+            const fixedHeadersInitial = [
+                "Current Multiplier (I/Iset)",
+                "Fault Current (Primary) [A]"
+            ];
+            fixedHeadersInitial.forEach(text => {
+                const th = document.createElement('th');
+                th.scope = 'col';
+                th.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+                th.textContent = text;
+                headerRow.appendChild(th);
+            });
+
+            // Conditionally add the 3rd column header
+            const thConditional = document.createElement('th');
+            thConditional.scope = 'col';
+            thConditional.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+            if (relayType === "VIP_400_RANGE") {
+                thConditional.textContent = 'CT Secondary Injection (mV)';
+            } else {
+                thConditional.textContent = 'CT Secondary (Injection) [A]'; // Changed: Removed "Current"
+            }
+            headerRow.appendChild(thConditional);
+
+            // Add new header for Actual Trip Time
+            const thActualTime = document.createElement('th');
+            thActualTime.scope = 'col';
+            thActualTime.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+            thActualTime.textContent = 'Actual Trip Time (s)';
+            headerRow.appendChild(thActualTime);
+
+            // Add -5% Time (s) header (moved to the left of Expected Trip Time)
+            const thMinus5 = document.createElement('th');
+            thMinus5.scope = 'col';
+            thMinus5.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+            thMinus5.textContent = '-5% Time (s)';
+            headerRow.appendChild(thMinus5);
+
+            // Add Expected Trip Time (s) header
+            const thExpected = document.createElement('th');
+            thExpected.scope = 'col';
+            thExpected.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+            thExpected.textContent = 'Expected Trip Time (s)';
+            headerRow.appendChild(thExpected);
+
+            // Add +5% Time (s) header
+            const thPlus5 = document.createElement('th');
+            thPlus5.scope = 'col';
+            thPlus5.className = 'px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider';
+            thPlus5.textContent = '+5% Time (s)';
+            headerRow.appendChild(thPlus5);
+        }
+
+
+        /**
+         * Updates the results table and the chart based on current input values.
+         */
+        function updateResults() {
+            let iset = parseFloat(isetInput.value); // Use 'let' as it might be re-assigned
+            const isetUnit = isetUnitSelect.value; // Get the selected unit for iset
+            const relayType = relayTypeSelect.value;
+            const curveType = curveTypeSelect.value;
+            const tms = parseFloat(tmsInput.value);
+            const dtDelay = parseFloat(dtDelayInput.value);
+            const ctPrimary = parseFloat(ctPrimaryInput.value);
+            const ctSecondary = parseFloat(ctSecondaryInput.value);
+
+            // Validate inputs
+            // The number of columns is now 7.
+            const errorColspan = 7;
+
+            if (isNaN(iset) || iset <= 0 || (curveType !== "DT" && (isNaN(tms) || tms <= 0)) || (curveType === "DT" && (isNaN(dtDelay) || dtDelay < 0))) {
+                resultsTableBody.innerHTML = `<tr><td colspan="${errorColspan}" class="px-4 py-2 text-center text-red-600">Please enter valid positive numbers for Relay Settings.</td></tr>`;
+                updateConstantsDisplay();
+                updateTableHeaders(); // Ensure headers are correct even with error
+                updateChart([], [], curveType, [], [], new Map()); // Clear chart including tolerance bands and actual points
+                toggleVisibility(); // Ensure visibility is updated even with error
+                return;
+            }
+
+            // Validate CT ratio
+            if (isNaN(ctPrimary) || isNaN(ctSecondary) || ctPrimary <= 0 || ctSecondary <= 0) {
+                resultsTableBody.innerHTML = `<tr><td colspan="${errorColspan}" class="px-4 py-2 text-center text-red-600">Invalid CT Ratio. Please enter positive values for CT Primary and Secondary.</td></tr>`;
+                updateConstantsDisplay();
+                updateTableHeaders(); // Ensure headers are correct even with error
+                updateChart([], [], curveType, [], [], new Map()); // Clear chart including tolerance bands and actual points
+                toggleVisibility(); // Ensure visibility is updated even with error
+                return;
+            }
+
+            const ctRatio = ctPrimary / ctSecondary;
+
+            // Convert Iset to primary if it's entered as secondary
+            if (isetUnit === 'Secondary') {
+                iset = iset * ctRatio;
+            }
+
+            // Update displays
+            updateConstantsDisplay();
+            updateTableHeaders(); // Update headers based on selected relay type
+            toggleVisibility(); // Update visibility of DT Delay input and VIP 400 CT note
+
+            // Clear previous results
+            resultsTableBody.innerHTML = '';
+            lastClickedRow = null; // Reset last clicked row on new results
+
+            // Fixed multipliers as per user request
+            const currentMultipliers = [1, 1.3, 1.5, 2, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
+
+
+            const tripTimesForChart = []; // Store actual trip times for chart
+            const primaryFaultCurrentsForChart = []; // Store primary fault currents for chart
+            const tripTimesMinus5Percent = []; // Store -5% trip times for chart shading
+            const tripTimesPlus5Percent = []; // Store +5% trip times for chart shading
+            const currentActualTripTimesMap = new Map(); // Map to store actual times for chart update
+
+            currentMultipliers.forEach(multiplier => {
+                const faultCurrentPrimary = multiplier * iset;
+                const ctSecondaryCurrent = faultCurrentPrimary / ctRatio;
+                
+                const underlyingTripTime = calculateTripTime(multiplier, curveType, tms, dtDelay);
+
+                const row = resultsTableBody.insertRow();
+                // Removed the hover:bg-gray-50 class to prevent conflict with touch events
+                row.className = 'transition duration-150'; 
+
+                const cell1 = row.insertCell(0); // Current Multiplier
+                const cell2 = row.insertCell(1); // Fault Current (Primary)
+                const cell3 = row.insertCell(2); // Conditional 3rd column (Secondary Current or mV Injection)
+                const cellActualTimeInputCell = row.insertCell(3); // New cell for Actual Trip Time input
+                const cellMinus5 = row.insertCell(4); // -5% Time (s) - NEW POSITION
+                const cellExpected = row.insertCell(5); // Expected Trip Time (s) - NEW POSITION
+                const cellPlus5 = row.insertCell(6); // +5% Time (s) - NEW POSITION
+
+                // Apply common cell styling
+                const commonCellClass = 'px-4 py-2 whitespace-nowrap text-sm text-gray-700';
+                cell1.className = 'px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900'; // Multiplier is slightly different
+                cell2.className = commonCellClass;
+                cell3.className = commonCellClass; // This cell's content changes
+                cellActualTimeInputCell.className = commonCellClass; // New cell for input
+                cellMinus5.className = commonCellClass; // NEW
+                cellExpected.className = commonCellClass; // NEW
+                cellPlus5.className = commonCellClass; // NEW
+
+                cell1.textContent = multiplier.toFixed(1);
+                cell2.textContent = faultCurrentPrimary.toFixed(2);
+                
+                // Populate the conditional 3rd cell based on relay type
+                if (relayType === "VIP_400_RANGE") {
+                    cell3.textContent = (ctSecondaryCurrent * 150).toFixed(2); // mV injection
+                } else {
+                    cell3.textContent = ctSecondaryCurrent.toFixed(2); // Ampere injection (Removed "Current")
+                }
+
+                // Create and append the input field for Actual Trip Time
+                const actualTimeInput = document.createElement('input');
+                actualTimeInput.type = 'number';
+                actualTimeInput.step = '0.001';
+                actualTimeInput.min = '0';
+                actualTimeInput.className = 'actual-time-input';
+                actualTimeInput.placeholder = 'Enter time';
+                actualTimeInput.dataset.faultCurrentPrimary = faultCurrentPrimary; // Store fault current for chart update
+                
+                // Add event listener to update chart when actual time is entered
+                actualTimeInput.addEventListener('input', (event) => {
+                    const enteredTime = parseFloat(event.target.value);
+                    const fcPrimary = parseFloat(event.target.dataset.faultCurrentPrimary);
+
+                    if (!isNaN(enteredTime) && enteredTime >= 0) {
+                        currentActualTripTimesMap.set(fcPrimary, enteredTime);
+                    } else {
+                        currentActualTripTimesMap.delete(fcPrimary); // Remove if invalid or empty
+                    }
+                    // Re-draw chart with updated actual times
+                    updateChart(primaryFaultCurrentsForChart, tripTimesForChart, curveType, tripTimesMinus5Percent, tripTimesPlus5Percent, currentActualTripTimesMap);
+                });
+                cellActualTimeInputCell.appendChild(actualTimeInput);
+
+                const displayTripTime = typeof underlyingTripTime === 'number' ? underlyingTripTime.toFixed(3) : underlyingTripTime;
+                cellExpected.textContent = displayTripTime; // Updated to new cell reference
+
+                if (typeof underlyingTripTime === 'number') {
+                    const timeMinus5 = underlyingTripTime * 0.95;
+                    const timePlus5 = underlyingTripTime * 1.05;
+                    cellPlus5.textContent = timePlus5.toFixed(3); // Updated to new cell reference
+                    cellMinus5.textContent = timeMinus5.toFixed(3); // Updated to new cell reference
+
+                    // For chart data (only add if it's a valid number)
+                    primaryFaultCurrentsForChart.push(faultCurrentPrimary);
+                    tripTimesForChart.push(underlyingTripTime);
+                    tripTimesMinus5Percent.push(timeMinus5);
+                    tripTimesPlus5Percent.push(timePlus5);
+                } else {
+                    cellPlus5.textContent = "N/A"; // Updated to new cell reference
+                    cellMinus5.textContent = "N/A"; // Updated to new cell reference
+                    // For chart data, if "No Trip" etc., we don't add to chart arrays
+                }
+
+                // Add click and touchend listeners to the row for highlighting
+                const handleRowClick = () => {
+                    // Remove highlight from previously clicked row, if any
+                    if (lastClickedRow && lastClickedRow !== row) {
+                        lastClickedRow.classList.remove('highlighted-row');
+                    }
+                    // Toggle highlight on the current row
+                    row.classList.toggle('highlighted-row');
+                    // Update last clicked row
+                    lastClickedRow = row.classList.contains('highlighted-row') ? row : null;
+                };
+
+                row.addEventListener('click', handleRowClick);
+                row.addEventListener('touchend', handleRowClick); // Add touchend listener for better mobile responsiveness
+            });
+
+            // Update the chart using the underlying time-current curve data and tolerance bands
+            updateChart(primaryFaultCurrentsForChart, tripTimesForChart, curveType, tripTimesMinus5Percent, tripTimesPlus5Percent, currentActualTripTimesMap);
+        }
+
+        // Add event listeners to input fields for real-time updates
+        isetInput.addEventListener('input', updateResults);
+        isetUnitSelect.addEventListener('change', updateResults); // New event listener for iset unit change
+        curveTypeSelect.addEventListener('change', updateResults); // Listen for curve type changes to toggle TMS/DT delay
+        tmsInput.addEventListener('input', updateResults);
+        dtDelayInput.addEventListener('input', updateResults);
+        ctPrimaryInput.addEventListener('input', updateResults);
+        ctSecondaryInput.addEventListener('input', updateResults);
+        relayTypeSelect.addEventListener('change', toggleVisibility); // Listen for relay type changes to toggle note
+
+        // Initial calculation and chart rendering when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            updateResults();
+            toggleVisibility(); // Call on load to set initial visibility
         });
     </script>
 </body>
