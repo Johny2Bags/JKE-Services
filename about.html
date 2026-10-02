@@ -11,7 +11,7 @@
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light gray background, will be overridden by sections */
+            background-color: #f8fafc;
         }
         /* Custom scrollbar for a cleaner look */
         ::-webkit-scrollbar {
@@ -35,10 +35,10 @@
             theme: {
                 extend: {
                     colors: {
-                        'jke-red': '#CC0000', /* A strong red from the logo */
-                        'jke-dark': '#1A1A1A', /* A very dark gray/black for backgrounds */
-                        'jke-light-gray': '#F8F8F8', /* A subtle light gray for section backgrounds */
-                        'jke-text-dark': '#333333', /* Dark text for light backgrounds */
+                        'jke-red': '#CC0000',
+                        'jke-dark': '#1A1A1A',
+                        'jke-light-gray': '#F8F8F8',
+                        'jke-text-dark': '#333333',
                     }
                 }
             }
@@ -52,14 +52,14 @@
         <div class="container mx-auto flex justify-between items-center">
             <!-- Logo/Company Name -->
             <a href="index.html" class="flex items-center">
-                <img src="JKE.png" alt="JKE-Services Logo" class="h-10 w-auto object-contain">
+                <img src="https://i.postimg.cc/56n4KSj2/JKE-Logo-Card-Blk.jpg" alt="JKE-Services Logo" class="h-10 w-auto object-contain rounded-md">
             </a>
 
             <!-- Navigation Menu (Desktop) -->
             <nav class="hidden md:flex space-x-6">
                 <a href="index.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Home</a>
                 <a href="services.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Services</a>
-                <a href="about.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">About Us</a>
+                <a href="about.html" class="text-jke-red font-medium transition duration-300">About Us</a>
                 <a href="contact.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Contact</a>
             </nav>
 
@@ -77,7 +77,7 @@
         <div id="mobile-menu" class="md:hidden hidden mt-4 space-y-2 bg-gray-800 rounded-md">
             <a href="index.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Home</a>
             <a href="services.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Services</a>
-            <a href="about.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">About Us</a>
+            <a href="about.html" class="block px-4 py-2 text-jke-red bg-gray-900 rounded-md transition duration-300">About Us</a>
             <a href="contact.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Contact</a>
         </div>
     </header>
@@ -86,22 +86,19 @@
     <section class="py-16 md:py-24 bg-white rounded-xl mx-4 md:mx-auto mt-8 max-w-7xl shadow-lg">
         <div class="container mx-auto px-6 md:px-10 lg:px-20 flex flex-col md:flex-row items-center gap-10">
             <div class="md:w-1/2">
-                <img src="https://placehold.co/600x400/1A1A1A/FFFFFF?text=Schneider+High+Voltage+Switchboard" alt="High Voltage Schneider Switchboard for Commercial Work" class="rounded-xl shadow-lg w-full h-auto object-cover">
+                <img src="https://i.postimg.cc/rmhVNJ3n/Hero-Section-Background-(Substation-Infrastructure).jpg" alt="Substation Infrastructure" class="rounded-xl shadow-lg w-full h-[380px] object-cover">
             </div>
             <div class="md:w-1/2 text-center md:text-left">
                 <h1 class="text-3xl md:text-4xl font-bold mb-6 text-jke-text-dark">About JKE-Services</h1>
                 <p class="text-lg text-gray-700 mb-4">
-                    JKE-Services is a dedicated UK-based company specialising in comprehensive electrical solutions for the **commercial and industrial sectors**.
-                    With years of experience, we pride ourselves on delivering high-quality, safe, and efficient
-                    electrical testing, commissioning, and installation services tailored for businesses.
+                    JKE-Services is a specialist UK-based engineering company delivering advanced high voltage (HV) and low voltage (LV) electrical solutions for the **commercial and industrial sectors**.
+                    With extensive hands-on expertise, we excel in complex electrical testing, commissioning, switchgear maintenance, and transformer diagnostics.
                 </p>
                 <p class="text-lg text-gray-700 mb-4">
-                    Our team of certified and highly skilled electricians is committed to meeting the diverse needs
-                    of our commercial and industrial clients across London and Essex. We adhere to the highest industry standards and
-                    regulations, ensuring peace of mind for every project, big or small.
+                    Led by Senior Authorised Persons (SAP), our technical team provides rigorous engineering services tailored to critical commercial and industrial environments across London and Essex. We adhere strictly to safety rules, industry standards, and statutory compliance.
                 </p>
                 <p class="text-lg text-gray-700">
-                    Your business's safety and operational efficiency are our top priorities. Choose JKE-Services for reliable electrical expertise.
+                    Your electrical infrastructure's safety, reliability, and operational continuity are our top priorities. Choose JKE-Services for expert engineering precision.
                 </p>
             </div>
         </div>
@@ -110,7 +107,7 @@
     <!-- Why Choose Us Section -->
     <section class="py-16 md:py-24 bg-jke-light-gray rounded-xl mx-4 md:mx-auto mt-8 max-w-7xl shadow-lg">
         <div class="container mx-auto px-6 md:px-10 lg:px-20">
-            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-jke-text-dark">Why Choose Us for Your Commercial Needs?</h2>
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 text-jke-text-dark">Why Choose Us for Your HV & LV Engineering Needs?</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 <!-- Feature 1 -->
                 <div class="flex items-start p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition duration-300">
@@ -120,8 +117,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Certified Professionals</h3>
-                        <p class="text-gray-700">Our team consists of fully certified and experienced electricians, specializing in commercial and industrial environments.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Senior Authorised Personnel</h3>
+                        <p class="text-gray-700">Fully qualified engineers holding Senior Authorised Person (SAP) status for safe system management and complex switching operations.</p>
                     </div>
                 </div>
                 <!-- Feature 2 -->
@@ -132,8 +129,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Prompt & Reliable</h3>
-                        <p class="text-gray-700">We are committed to timely service and reliable project completion, minimizing disruption to your business operations.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Specialist Capabilities</h3>
+                        <p class="text-gray-700">Expertise in advanced diagnostics including transformer oil sampling, Dissolved Gas Analysis (DGA), partial discharge testing, and relay commissioning.</p>
                     </div>
                 </div>
                 <!-- Feature 3 -->
@@ -144,8 +141,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Safety First</h3>
-                        <p class="text-gray-700">Adhering to the highest safety standards and commercial regulations in all our operations.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Uncompromising Safety</h3>
+                        <p class="text-gray-700">Rigorous adherence to safety method statements, risk assessments, and high-voltage safety rules to protect personnel and assets.</p>
                     </div>
                 </div>
                 <!-- Feature 4 -->
@@ -156,8 +153,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Competitive Pricing</h3>
-                        <p class="text-gray-700">Quality services at transparent and competitive rates for commercial projects.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Transparent Solutions</h3>
+                        <p class="text-gray-700">Clear reporting, detailed technical documentation, and competitive pricing designed for long-term operational asset management.</p>
                     </div>
                 </div>
                 <!-- Feature 5 -->
@@ -169,8 +166,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Local Expertise</h3>
-                        <p class="text-gray-700">Deep understanding of commercial electrical requirements across London & Essex.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Regional Coverage</h3>
+                        <p class="text-gray-700">Prompt deployment and expert local service across London, Essex, and surrounding counties.</p>
                     </div>
                 </div>
                 <!-- Feature 6 -->
@@ -181,8 +178,8 @@
                         </svg>
                     </div>
                     <div>
-                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Customer Satisfaction</h3>
-                        <p class="text-gray-700">Dedicated to achieving 100% client satisfaction on every commercial job.</p>
+                        <h3 class="text-xl font-semibold mb-2 text-jke-text-dark">Client Partnership</h3>
+                        <p class="text-gray-700">Building trusted relationships with facilities managers, industrial plants, and commercial contractors.</p>
                     </div>
                 </div>
             </div>
@@ -194,7 +191,7 @@
         <div class="container mx-auto px-6 md:px-10 lg:px-20">
             <h2 class="text-3xl font-bold mb-4">Ready to Discuss Your Project?</h2>
             <p class="text-lg mb-8 opacity-90">
-                Contact us today for a free consultation and a no-obligation quote for your commercial electrical requirements.
+                Contact us today for a consultation and a quote for your high voltage or commercial electrical requirements.
             </p>
             <a href="contact.html" class="inline-block bg-jke-red text-white hover:bg-red-700 font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition duration-300">
                 Get a Free Quote
@@ -205,7 +202,7 @@
     <!-- Footer Section -->
     <footer class="bg-jke-dark text-gray-400 py-8 px-6 md:px-10 lg:px-20 text-center rounded-t-lg">
         <div class="container mx-auto">
-            <p>&copy; 2024 JKE-Services. All rights reserved.</p>
+            <p>&copy; 2026 JKE-Services. All rights reserved.</p>
             <p class="mt-2">Serving London & Essex, UK</p>
             <div class="flex justify-center space-x-4 mt-4">
                 <a href="#" class="text-gray-400 hover:text-jke-red transition duration-300">Privacy Policy</a>
@@ -228,14 +225,12 @@
             // Smooth scrolling for navigation links (only relevant for internal page anchors)
             document.querySelectorAll('a[href^="#"]').forEach(anchor => {
                 anchor.addEventListener('click', function (e) {
-                    // Check if the href is an internal anchor on the same page
                     if (this.hash && this.pathname === window.location.pathname) {
                         e.preventDefault();
                         document.querySelector(this.getAttribute('href')).scrollIntoView({
                             behavior: 'smooth'
                         });
                     }
-                    // Close mobile menu after clicking a link
                     if (!mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
                     }
