@@ -1,19 +1,38 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
+    <!-- Core SEO Meta Tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>JKE-Services - Contact Us</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Contact JKE-Services | High-Voltage & SAP Specialists London & Essex</title>
+    <meta name="description" content="Get in touch with JKE-Services for expert high-voltage electrical testing, commissioning, switchgear maintenance, and SAP services across London and Essex.">
+    <meta name="keywords" content="Contact JKE-Services, High Voltage Engineers, SAP Support London Essex, Electrical Testing Enquiries">
+    <meta name="author" content="JKE-Services">
+    
+    <!-- Geo Meta Tags for Local SEO -->
+    <meta name="geo.region" content="GB-ESS">
+    <meta name="geo.placename" content="Essex, London">
+
+    <!-- Open Graph / Social Sharing Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://jke-services.co.uk/contact.html">
+    <meta property="og:title" content="Contact JKE-Services | High-Voltage & SAP Specialists">
+    <meta property="og:description" content="Get in touch for expert high-voltage electrical testing, commissioning, and SAP services across London and Essex.">
+    <meta property="og:image" content="https://i.postimg.cc/56n4KSj2/JKE-Logo-Card-Blk.jpg">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Contact JKE-Services | High-Voltage & SAP Specialists">
+    <meta name="twitter:description" content="Get in touch for expert high-voltage testing and SAP services across London and Essex.">
+    <meta name="twitter:image" content="https://i.postimg.cc/56n4KSj2/JKE-Logo-Card-Blk.jpg">
+
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts - Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #f8fafc; /* Light gray background, will be overridden by sections */
+            background-color: #f8fafc;
         }
-        /* Custom scrollbar for a cleaner look */
         ::-webkit-scrollbar {
             width: 8px;
         }
@@ -22,50 +41,54 @@
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: #CC0000; /* JKE Red */
+            background: #CC0000;
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #A30000; /* Darker JKE Red on hover */
+            background: #990000;
         }
     </style>
-    <!-- Tailwind CSS Custom Configuration for JKE-Services Colors -->
     <script>
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'jke-red': '#CC0000', /* A strong red from the logo */
-                        'jke-dark': '#1A1A1A', /* A very dark gray/black for backgrounds */
-                        'jke-light-gray': '#F8F8F8', /* A subtle light gray for section backgrounds */
-                        'jke-text-dark': '#333333', /* Dark text for light backgrounds */
+                        'jke-red': '#CC0000',
+                        'jke-red-dark': '#990000',
+                        'jke-dark': '#0B0B0B',
+                        'jke-card-bg': '#141414',
+                        'jke-light-gray': '#F8F8F8',
+                        'jke-text-dark': '#222222',
                     }
                 }
             }
         }
     </script>
 </head>
-<body class="text-jke-text-dark">
+<body class="text-jke-text-dark bg-gray-50">
 
-    <!-- Header Section -->
-    <header class="bg-jke-dark shadow-md py-4 px-6 md:px-10 lg:px-20 sticky top-0 z-50 rounded-b-lg">
+    <!-- Header / Navigation -->
+    <header class="bg-jke-dark border-b border-gray-800 shadow-xl py-3 px-6 md:px-10 lg:px-20 sticky top-0 z-50">
         <div class="container mx-auto flex justify-between items-center">
-            <!-- Logo/Company Name -->
             <a href="index.html" class="flex items-center">
-                <img src="JKE.png" alt="JKE-Services Logo" class="h-10 w-auto object-contain">
+                <img src="https://i.postimg.cc/56n4KSj2/JKE-Logo-Card-Blk.jpg" alt="JKE-Services Logo" class="h-14 md:h-16 w-auto object-contain rounded-md shadow-sm">
             </a>
 
-            <!-- Navigation Menu (Desktop) -->
-            <nav class="hidden md:flex space-x-6">
+            <nav class="hidden md:flex space-x-6 items-center">
                 <a href="index.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Home</a>
                 <a href="services.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Services</a>
                 <a href="about.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">About Us</a>
-                <a href="contact.html" class="text-gray-300 hover:text-jke-red font-medium transition duration-300">Contact</a>
+                <a href="contact.html" class="text-white font-medium hover:text-jke-red transition duration-300">Contact</a>
+                <a href="tel:07757337835" class="bg-jke-red text-white px-4 py-2 rounded-full flex items-center space-x-2 font-bold hover:bg-jke-red-dark transition duration-300 shadow-sm">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 18H4C2.89543 18 2 17.1046 2 16V8C2 6.89543 2.89543 6 4 6H20C21.1046 6 22 6.89543 22 8V16C22 17.1046 21.1046 18 20 18ZM15 11H9V12H15V11Z" />
+                    </svg>
+                    <span>07757 337835</span>
+                </a>
             </nav>
 
-            <!-- Mobile Menu Button -->
             <div class="md:hidden">
-                <button id="mobile-menu-button" class="text-gray-300 hover:text-jke-red focus:outline-none">
+                <button id="mobile-menu-button" class="text-gray-300 hover:text-jke-red focus:outline-none" aria-label="Toggle Menu">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
                     </svg>
@@ -73,114 +96,170 @@
             </div>
         </div>
 
-        <!-- Mobile Menu (Hidden by default) -->
-        <div id="mobile-menu" class="md:hidden hidden mt-4 space-y-2 bg-gray-800 rounded-md">
-            <a href="index.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Home</a>
-            <a href="services.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Services</a>
-            <a href="about.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">About Us</a>
-            <a href="contact.html" class="block px-4 py-2 text-gray-200 hover:bg-gray-700 rounded-md transition duration-300">Contact</a>
+        <div id="mobile-menu" class="hidden md:hidden mt-4 space-y-2 bg-jke-card-bg p-4 rounded-lg border border-gray-800">
+            <a href="index.html" class="block px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-md">Home</a>
+            <a href="services.html" class="block px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-md">Services</a>
+            <a href="about.html" class="block px-3 py-2 text-gray-300 hover:bg-gray-800 rounded-md">About Us</a>
+            <a href="contact.html" class="block px-3 py-2 text-white font-semibold bg-gray-800 rounded-md">Contact</a>
+            <a href="tel:07757337835" class="block px-3 py-2 text-jke-red font-bold hover:bg-gray-800 rounded-md">Call: 07757 337835</a>
         </div>
     </header>
 
-    <!-- Contact Section -->
-    <section class="py-16 md:py-24 bg-jke-dark text-white rounded-xl mx-4 md:mx-auto mt-8 mb-8 max-w-7xl shadow-lg">
-        <div class="container mx-auto px-6 md:px-10 lg:px-20 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold mb-12">Get in Touch</h1>
-            <div class="max-w-2xl mx-auto">
-                <p class="text-lg mb-8 opacity-90">
-                    Have a project in mind or need expert advice? Contact JKE-Services today for a free consultation and quote.
-                    We look forward to assisting you with your electrical needs in London and Essex.
-                </p>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <!-- Contact Information -->
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4">Contact Details</h3>
-                        <p class="mb-2 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-jke-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684L10.5 9.25a1 1 0 01-1.054 1.334L8 10.5a11 11 0 006 6l.5-1.446a1 1 0 011.334-1.054l4.566 1.912A1 1 0 0121 16.72V21a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
-                            </svg>
-                            Phone: <a href="tel:+447757337835" class="hover:underline">+44 7757 337835</a>
-                        </p>
-                        <p class="mb-2 flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-jke-red" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                            </svg>
-                            Email: <a href="mailto:john@jke-services.co.uk" class="hover:underline">john@jke-services.co.uk</a>
-                        </p>
-                        <p class="flex items-start">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-jke-red mt-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z" />
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                            </svg>
-                            Address: Unit 70, Barking Industrial Park, Alfreds Way, Barking IG11 0TJ
-                        </p>
+    <!-- Page Header Hero -->
+    <section class="bg-jke-dark text-white py-16 md:py-24 text-center relative overflow-hidden">
+        <div class="absolute inset-0 z-0">
+            <img src="https://i.postimg.cc/rmhVNJ3n/Hero-Section-Background-(Substation-Infrastructure).jpg" alt="Substation Infrastructure" class="w-full h-full object-cover opacity-20">
+            <div class="absolute inset-0 bg-gradient-to-b from-jke-dark/80 to-jke-dark"></div>
+        </div>
+        <div class="container mx-auto px-6 relative z-10 max-w-4xl">
+            <span class="inline-block bg-jke-red/15 text-red-400 border border-jke-red/30 px-4 py-1.5 rounded-full text-sm font-semibold mb-4 tracking-wide uppercase">
+                Get in Touch
+            </span>
+            <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Contact JKE-Services</h1>
+            <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+                Ready to discuss your high-voltage engineering project, testing requirements, or SAP support? Reach out to our team today.
+            </p>
+        </div>
+    </section>
+
+    <!-- Contact Content Section -->
+    <section class="py-20 md:py-28 bg-gray-50">
+        <div class="container mx-auto px-6 md:px-10 lg:px-20 max-w-7xl">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+                
+                <!-- Left Column: Contact Details & Info Card -->
+                <div class="lg:col-span-5 space-y-6">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="text-2xl font-bold text-jke-text-dark mb-6">Direct Contact Information</h3>
+                        
+                        <div class="space-y-6">
+                            <!-- Phone -->
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-jke-red/10 p-3 rounded-xl text-jke-red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684L10.5 9.25a1 1 0 01-1.054 1.334L8 10.5a11 11 0 006 6l.5-1.446a1 1 0 011.334-1.054l4.566 1.912A1 1 0 0121 16.72V21a2 2 0 01-2 2H5a2 2 0 01-2-2V5z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium">Phone Enquiries</p>
+                                    <a href="tel:07757337835" class="text-jke-text-dark font-bold text-lg hover:text-jke-red transition duration-300">07757 337835</a>
+                                </div>
+                            </div>
+
+                            <!-- WhatsApp -->
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-green-500/10 p-3 rounded-xl text-green-600">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"/>
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium">WhatsApp Chat</p>
+                                    <a href="https://wa.me/447757337835?text=Hi%20John,%20I'm%20looking%20for%20assistance%20with%20a%20high-voltage%20electrical%20project." target="_blank" class="text-jke-text-dark font-bold hover:text-green-600 transition duration-300 flex items-center gap-1">
+                                        Message Us <span class="text-xs text-green-600 font-normal">(&#x2713; Quick Response)</span>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Email -->
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-jke-red/10 p-3 rounded-xl text-jke-red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium">Email Address</p>
+                                    <a href="mailto:john@jke-services.co.uk" class="text-jke-text-dark font-bold hover:text-jke-red transition duration-300">john@jke-services.co.uk</a>
+                                </div>
+                            </div>
+
+                            <!-- Location / Service Area -->
+                            <div class="flex items-start space-x-4">
+                                <div class="bg-jke-red/10 p-3 rounded-xl text-jke-red">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.828 0L6.343 16.657a8 8 0 1111.314 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <p class="text-sm text-gray-500 font-medium">Service Coverage</p>
+                                    <p class="text-jke-text-dark font-semibold">London & Essex, United Kingdom</p>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Contact Form (Functional with Formspree) -->
-                    <div>
-                        <h3 class="text-2xl font-semibold mb-4">Send Us a Message</h3>
-                        <form action="https://formspree.io/f/f/john@jke-services.co.uk" method="POST" class="space-y-4">
+                    <div class="bg-jke-dark text-white p-8 rounded-2xl shadow-sm border border-gray-800">
+                        <h4 class="font-bold text-lg mb-2">Professional Standards</h4>
+                        <p class="text-gray-300 text-sm leading-relaxed">
+                            All high-voltage engineering duties, switching schedules, and testing procedures are conducted with strict adherence to UK safety legislation and industry compliance guidelines.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Column: Formspree Contact Form -->
+                <div class="lg:col-span-7">
+                    <div class="bg-white p-8 md:p-10 rounded-2xl shadow-sm border border-gray-200">
+                        <h3 class="text-2xl font-bold text-jke-text-dark mb-2">Send Us a Message</h3>
+                        <p class="text-gray-600 text-sm mb-8">Fill out the form below and we’ll get back to you promptly to discuss your requirements.</p>
+                        
+                        <form action="https://formspree.io/f/john@jke-services.co.uk" method="POST" class="space-y-6">
                             <input type="hidden" name="_subject" value="New Contact Form Submission from JKE-Services Website">
+                            
                             <div>
-                                <label for="name" class="sr-only">Your Name</label>
-                                <input type="text" id="name" name="name" placeholder="Your Name" class="w-full p-3 rounded-md bg-white bg-opacity-20 border border-white border-opacity-30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-jke-red text-white" required>
+                                <label for="name" class="block text-sm font-semibold text-gray-700 mb-2">Your Name</label>
+                                <input type="text" id="name" name="name" placeholder="John Smith" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jke-red focus:bg-white text-jke-text-dark transition duration-300" required>
                             </div>
+                            
                             <div>
-                                <label for="email" class="sr-only">Your Email</label>
-                                <input type="email" id="email" name="email" placeholder="Your Email" class="w-full p-3 rounded-md bg-white bg-opacity-20 border border-white bg-opacity-30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-jke-red text-white" required>
+                                <label for="email" class="block text-sm font-semibold text-gray-700 mb-2">Your Email</label>
+                                <input type="email" id="email" name="email" placeholder="john@example.com" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jke-red focus:bg-white text-jke-text-dark transition duration-300" required>
                             </div>
+                            
                             <div>
-                                <label for="message" class="sr-only">Your Message</label>
-                                <textarea id="message" name="message" rows="5" placeholder="Your Message" class="w-full p-3 rounded-md bg-white bg-opacity-20 border border-white bg-opacity-30 placeholder-gray-200 focus:outline-none focus:ring-2 focus:ring-jke-red text-white" required></textarea>
+                                <label for="message" class="block text-sm font-semibold text-gray-700 mb-2">Your Message / Project Details</label>
+                                <textarea id="message" name="message" rows="5" placeholder="Please describe your HV testing, commissioning, or SAP requirements..." class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-jke-red focus:bg-white text-jke-text-dark transition duration-300" required></textarea>
                             </div>
-                            <button type="submit" class="w-full bg-jke-red text-white hover:bg-red-700 font-bold py-3 px-6 rounded-md shadow-md transform hover:scale-105 transition duration-300">
+                            
+                            <button type="submit" class="w-full bg-jke-red text-white hover:bg-jke-red-dark font-bold py-4 px-8 rounded-xl shadow-md transition duration-300">
                                 Send Message
                             </button>
                         </form>
                     </div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <!-- Footer Section -->
-    <footer class="bg-jke-dark text-gray-400 py-8 px-6 md:px-10 lg:px-20 text-center rounded-t-lg">
-        <div class="container mx-auto">
-            <p>&copy; 2024 JKE-Services. All rights reserved.</p>
-            <p class="mt-2">Serving London & Essex, UK</p>
-            <div class="flex justify-center space-x-4 mt-4">
-                <a href="#" class="text-gray-400 hover:text-jke-red transition duration-300">Privacy Policy</a>
-                <span class="text-gray-600">|</span>
-                <a href="#" class="text-gray-400 hover:text-jke-red transition duration-300">Terms of Service</a>
+    <!-- Footer -->
+    <footer class="bg-jke-dark text-gray-400 py-10 px-6 md:px-10 lg:px-20 text-center border-t border-gray-800">
+        <div class="container mx-auto max-w-7xl flex flex-col md:flex-row justify-between items-center gap-6">
+            <div class="text-left">
+                <p class="text-white font-bold text-lg mb-1">JKE-Services</p>
+                <p class="text-sm">High-Voltage Electrical Specialists | London & Essex, UK</p>
+            </div>
+            <div class="text-sm">
+                <p>&copy; <span id="current-year"></span> JKE-Services. All rights reserved.</p>
+            </div>
+            <div class="flex space-x-6 text-sm">
+                <a href="#" class="hover:text-jke-red transition duration-300">Privacy Policy</a>
+                <a href="#" class="hover:text-jke-red transition duration-300">Terms of Service</a>
             </div>
         </div>
     </footer>
 
-    <!-- JavaScript for Mobile Menu Toggle -->
+    <!-- Scripts -->
     <script>
+        document.getElementById('current-year').textContent = new Date().getFullYear();
+
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
 
             mobileMenuButton.addEventListener('click', function() {
                 mobileMenu.classList.toggle('hidden');
-            });
-
-            // Smooth scrolling for navigation links (only relevant for internal page anchors)
-            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-                anchor.addEventListener('click', function (e) {
-                    // Check if the href is an internal anchor on the same page
-                    if (this.hash && this.pathname === window.location.pathname) {
-                        e.preventDefault();
-                        document.querySelector(this.getAttribute('href')).scrollIntoView({
-                            behavior: 'smooth'
-                        });
-                    }
-                    // Close mobile menu after clicking a link
-                    if (!mobileMenu.classList.contains('hidden')) {
-                        mobileMenu.classList.add('hidden');
-                    }
-                });
             });
         });
     </script>
